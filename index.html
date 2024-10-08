@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleprompter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+        /* Estilos generales */
+        body {
+            background: linear-gradient(180deg, #000000, #222222);
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Contenedor del teleprompter */
+        .teleprompter-container {
+            width: 400px;
+            height: 80px;
+            border: 2px solid #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            position: absolute;
+            cursor: grab;
+            resize: both;
+            min-width: 200px;
+            min-height: 50px;
+        }
+
+        /* Texto desplazable dentro del teleprompter */
+        .teleprompter-text {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 24px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            animation: scrollText linear infinite;
+        }
+
+        /* Animación del texto */
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0); /* Empieza desde el borde derecho del contenedor */
+            }
+            100% {
+                transform: translateX(-100%); /* Desplaza completamente el texto hacia la izquierda */
+            }
+        }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 200px;
+        }
+
+        .controls input,
+        .controls textarea,
+        .controls button {
+            margin: 5px;
+            padding: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            border: 1px solid #FFFFFF;
+            border-radius: 5px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .controls textarea {
+            width: 300px;
+            height: 100px;
+            resize: vertical;
+        }
+
+        .controls button:hover,
+        .controls input:hover,
+        .controls textarea:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor principal del teleprompter -->
+    <div class="teleprompter-container" id="teleprompterContainer">
+        <div class="teleprompter-text" id="teleprompterText">
+            Este es un ejemplo de texto para el teleprompter de reportero.
+        </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+        <label for="speedInput">Velocidad (caracteres por segundo):</label>
+        <input type="number" id="speedInput" value="10" min="1" max="100" />
+        
+        <label for="textInput">Texto del teleprompter:</label>
+        <textarea id="textInput">Este es un ejemplo de texto para el teleprompter de reportero. Puedes agregar más texto aquí y no habrá limitaciones de caracteres.</textarea>
+        
+        <div class="button-group">
+            <button onclick="pauseTeleprompter()">Pausar</button>
+            <button onclick="resumeTeleprompter()">Reanudar</button>
+            <button onclick="restartAnimation()">Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        const teleprompterContainer = document.getElementById('teleprompterContainer');
+        const teleprompterText = document.getElementById('teleprompterText');
+        const speedInput = document.getElementById('speedInput');
+        const textInput = document.getElementById('textInput');
+
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+        let isPaused = false;
+
+        // Función para iniciar el arrastre
+        teleprompterContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialLeft = teleprompterContainer.offsetLeft;
+            initialTop = teleprompterContainer.offsetTop;
+            teleprompterContainer.style.cursor = 'grabbing';
+        });
+
+        // Función para mover el contenedor mientras se arrastra
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                teleprompterContainer.style.left = `${initialLeft + dx}px`;
+                teleprompterContainer.style.top = `${initialTop + dy}px`;
+            }
+        });
+
+        // Función para finalizar el arrastre
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            teleprompterContainer.style.cursor = 'grab';
+        });
+
+        // Función para actualizar la velocidad y el texto automáticamente
+        function updateTeleprompter() {
+            teleprompterText.textContent = textInput.value;
+            restartAnimation();
+        }
+
+        // Calcula la duración de la animación en función de la longitud del texto y la velocidad (caracteres por segundo)
+        function calculateDuration() {
+            const textLength = textInput.value.length;
+            const speed = speedInput.value;
+            const containerWidth = teleprompterContainer.offsetWidth;
+            const textWidth = teleprompterText.scrollWidth;
+
+            const baseDuration = textWidth / speed;
+
+            return Math.max(baseDuration, containerWidth / speed);
+        }
+
+        // Reinicia la animación con una nueva configuración
+        function restartAnimation() {
+            const duration = calculateDuration();
+            teleprompterText.style.animation = 'none';
+            teleprompterText.offsetHeight; // Forzar el reflow para reiniciar la animación
+            teleprompterText.style.animation = `scrollText ${duration}s linear infinite`;
+        }
+
+        // Función para pausar el desplazamiento del teleprompter
+        function pauseTeleprompter() {
+            teleprompterText.style.animationPlayState = 'paused';
+            isPaused = true;
+        }
+
+        // Función para reanudar el desplazamiento del teleprompter
+        function resumeTeleprompter() {
+            teleprompterText.style.animationPlayState = 'running';
+            isPaused = false;
+        }
+
+        // Función para alternar pausa y reanudar con la barra espaciadora
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault(); // Evitar que la barra espaciadora cause desplazamiento de la página
+                if (isPaused) {
+                    resumeTeleprompter();
+                } else {
+                    pauseTeleprompter();
+                }
+            }
+        });
+
+        // Actualizar el teleprompter cuando cambie la velocidad o el contenido del texto
+        speedInput.addEventListener('input', updateTeleprompter);
+        textInput.addEventListener('input', updateTeleprompter);
+
+        // Inicializar la configuración por defecto
+        updateTeleprompter();
+    </script>
+</body>
+</html>
