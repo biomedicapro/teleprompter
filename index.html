@@ -197,48 +197,41 @@
             color: var(--header-footer-text-color);
             padding: 1rem 2rem;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
             position: relative;
         }
 
-        .main-interface .logo {
+        /* Parte Superior del Header */
+        .main-interface .header-top {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .main-interface .header-top .logo {
             display: flex;
             align-items: center;
         }
 
-        .main-interface .logo img {
-            height: 50px;
+        .main-interface .header-top .logo img {
+            height: 40px;
             margin-right: 10px;
         }
 
-        .main-interface .menu {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .main-interface .menu a {
+        .main-interface .header-top h1 {
+            font-size: 1.5rem;
             color: var(--header-footer-text-color);
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
         }
 
-        .main-interface .menu a:hover {
-            color: #cce7ff;
-        }
-
+        /* Barra de Búsqueda */
         .main-interface .search-bar {
             display: flex;
             align-items: center;
-            margin-top: 0.5rem;
+            margin: 1rem 0;
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             position: relative;
         }
 
@@ -271,6 +264,46 @@
             background-color: #003080;
         }
 
+        /* Navegación e Cerrar Sesión */
+        .main-interface .header-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-interface .menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-interface .menu a {
+            color: var(--header-footer-text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .main-interface .menu a:hover {
+            color: #cce7ff;
+        }
+
+        .main-interface .menu a#logout-button {
+            color: var(--logout-color);
+        }
+
+        .main-interface .menu a#logout-button:hover {
+            color: var(--logout-hover-color);
+        }
+
+        /* Hero Section */
         .main-interface .hero {
             text-align: center;
             padding: 4rem 2rem;
@@ -303,6 +336,7 @@
             transform: scale(1.05);
         }
 
+        /* Container para Categorías */
         .main-interface .container {
             max-width: 1000px;
             margin: 2rem auto;
@@ -341,6 +375,7 @@
             font-size: 0.9rem;
         }
 
+        /* Footer de la Interfaz Principal */
         .main-interface footer {
             background-color: var(--header-footer-color);
             color: var(--header-footer-text-color);
@@ -419,35 +454,58 @@
             margin-top: 0.5rem;
         }
 
+        /* Media Queries para Responsividad */
         @media (max-width: 768px) {
-            .main-interface .menu {
-                width: 100%;
-                justify-content: space-between;
+            .main-interface .menu-toggle {
+                display: block;
+                font-size: 1.5rem;
+                cursor: pointer;
+                position: absolute;
+                top: 1rem;
+                right: 2rem;
             }
 
+            .main-interface .menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--header-footer-color);
+                border-radius: 5px;
+                margin-top: 0.5rem;
+            }
+
+            .main-interface .menu.active {
+                display: flex;
+            }
+
+            .main-interface .menu a {
+                padding: 0.5rem 1rem;
+            }
+
+            /* Ajustes en Header */
+            .main-interface header {
+                align-items: center;
+            }
+
+            /* Header Top */
+            .main-interface .header-top h1 {
+                font-size: 1.2rem;
+            }
+
+            /* Header Bottom */
+            .main-interface .header-bottom {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Ajustes en Search Bar */
             .main-interface .search-bar {
                 max-width: 100%;
             }
 
-            .main-interface header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .main-interface .menu {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-                margin-top: 0.5rem;
-            }
-
-            .main-interface .search-bar {
-                margin-top: 1rem;
-            }
-
-            .main-interface .hero {
-                padding: 2rem 1rem;
-            }
-
+            /* Ajustes en Categorías */
             .main-interface .categories {
                 flex-direction: column;
                 align-items: center;
@@ -455,51 +513,6 @@
 
             .main-interface .category {
                 max-width: 100%;
-            }
-
-            /* Ajustes para el header móvil */
-            .main-interface header {
-                padding: 1rem;
-            }
-
-            .main-interface .menu {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            /* Menú desplegable para móviles */
-            .main-interface .menu-toggle {
-                display: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-            }
-
-            @media (max-width: 768px) {
-                .main-interface .menu {
-                    display: none;
-                    flex-direction: column;
-                    width: 100%;
-                    background-color: var(--header-footer-color);
-                    border-radius: 5px;
-                    margin-top: 0.5rem;
-                }
-
-                .main-interface .menu.active {
-                    display: flex;
-                }
-
-                .main-interface .menu-toggle {
-                    display: block;
-                    color: var(--header-footer-text-color);
-                }
-
-                .main-interface .menu a {
-                    padding: 0.5rem 1rem;
-                }
-
-                .main-interface .search-bar {
-                    width: 100%;
-                }
             }
         }
 
@@ -611,22 +624,28 @@
         <!-- Nueva Interfaz Principal -->
         <div class="main-interface" id="main-interface">
             <header>
-                <div class="logo">
-                    <img src="https://via.placeholder.com/50" alt="Logo">
-                    <h1>Interactive Learning</h1>
+                <!-- Parte Superior: Logo y Nombre -->
+                <div class="header-top">
+                    <div class="logo">
+                        <img src="https://via.placeholder.com/50" alt="Logo">
+                        <h1>Biomédica</h1>
+                    </div>
                 </div>
-                <div class="menu-toggle" id="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <nav class="menu" id="menu">
-                    <a href="#"><i class="fas fa-home"></i> Home</a>
-                    <a href="#"><i class="fas fa-cogs"></i> Features</a>
-                    <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-                    <a href="#" id="logout-button" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-                </nav>
+
+                <!-- Barra de Búsqueda -->
                 <div class="search-bar">
                     <input type="text" placeholder="Buscar...">
                     <button><i class="fas fa-search"></i></button>
+                </div>
+
+                <!-- Parte Inferior: Enlaces y Cerrar Sesión -->
+                <div class="header-bottom">
+                    <nav class="menu" id="menu">
+                        <a href="#"><i class="fas fa-home"></i> Home</a>
+                        <a href="#"><i class="fas fa-cogs"></i> Features</a>
+                        <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+                        <a href="#" id="logout-button" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </nav>
                 </div>
             </header>
 
@@ -852,16 +871,6 @@
             document.getElementById('initial-footer').style.display = 'block';
             alert('Has cerrado sesión correctamente.');
         });
-
-        // Manejo del Menú Desplegable en Móviles
-        const menuToggle = document.getElementById('menu-toggle');
-        const menu = document.getElementById('menu');
-
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                menu.classList.toggle('active');
-            });
-        }
     </script>
 </body>
 </html>
