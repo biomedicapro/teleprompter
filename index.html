@@ -1,213 +1,691 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teleprompter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Learning Platform | Biomédica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+        :root {
+            --primary-color: #06132f;
+            --header-footer-color: #06132f;
+            --header-footer-text-color: #ffffff;
+            --background-color: #f4f4f9;
+            --text-color: #333;
+            --button-hover-color: #021024;
+            --logout-color: #ff4d4d;
+            --logout-hover-color: #e60000;
+        }
 
-        /* Estilos generales */
-        body {
-            background: linear-gradient(180deg, #000000, #222222);
-            color: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        /* Reset y estilos base */
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
             font-family: 'Roboto', sans-serif;
-        }
-
-        /* Contenedor del teleprompter */
-        .teleprompter-container {
-            width: 400px;
-            height: 80px;
-            border: 2px solid #FFFFFF;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            position: absolute;
-            cursor: grab;
-            resize: both;
-            min-width: 200px;
-            min-height: 50px;
-        }
-
-        /* Texto desplazable dentro del teleprompter */
-        .teleprompter-text {
-            position: absolute;
-            white-space: nowrap;
-            font-size: 24px;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            animation: scrollText linear infinite;
-        }
-
-        /* Animación del texto */
-        @keyframes scrollText {
-            0% {
-                transform: translateX(0); /* Empieza desde el borde derecho del contenedor */
-            }
-            100% {
-                transform: translateX(-100%); /* Desplaza completamente el texto hacia la izquierda */
-            }
-        }
-
-        /* Controles */
-        .controls {
+            background: var(--background-color);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            margin-top: 200px;
+            color: var(--text-color);
         }
 
-        .controls input,
-        .controls textarea,
-        .controls button {
-            margin: 5px;
-            padding: 8px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #FFFFFF;
-            border: 1px solid #FFFFFF;
-            border-radius: 5px;
-            transition: background 0.3s ease-in-out;
-        }
-
-        .controls textarea {
-            width: 300px;
-            height: 100px;
-            resize: vertical;
-        }
-
-        .controls button:hover,
-        .controls input:hover,
-        .controls textarea:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .button-group {
+        .content {
+            flex: 1;
             display: flex;
-            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .login-container, .register-container, .welcome-container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 4px rgba(6, 19, 47, 0.5);
+            outline: none;
+        }
+
+        .form-actions {
+            margin-top: 1.5rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+            transform: scale(1.02);
+        }
+
+        .additional-links {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .additional-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .additional-links a:hover {
+            color: var(--button-hover-color);
+        }
+
+        /* Footer Inicial */
+        footer#initial-footer {
+            background-color: var(--header-footer-color);
+            color: var(--header-footer-text-color);
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+        }
+
+        footer#initial-footer img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: cover;
+        }
+
+        footer#initial-footer p {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Pantallas pequeñas */
+        @media (max-width: 600px) {
+            .login-container, .register-container, .welcome-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input, button {
+                font-size: 0.9rem;
+            }
+
+            footer#initial-footer p {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Estilos para la interfaz principal */
+        .main-interface {
+            display: none; /* Oculto por defecto */
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        /* Header específico para la interfaz principal */
+        .main-interface header {
+            background-color: var(--header-footer-color);
+            color: var(--header-footer-text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-interface .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-interface .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .main-interface .menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .main-interface .menu a {
+            color: var(--header-footer-text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .main-interface .menu a:hover {
+            color: #cce7ff;
+        }
+
+        .main-interface .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-interface .search-bar input {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .main-interface .search-bar button {
+            padding: 0.5rem 1rem;
+            background-color: #004aad;
+            color: var(--header-footer-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .main-interface .search-bar button:hover {
+            background-color: #003080;
+        }
+
+        .main-interface .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: url('https://via.placeholder.com/1920x600') center/cover no-repeat;
+            color: var(--text-color);
+        }
+
+        .main-interface .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .main-interface .hero p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-interface .hero a {
+            text-decoration: none;
+            background-color: var(--primary-color);
+            color: var(--header-footer-text-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .main-interface .hero a:hover {
+            transform: scale(1.05);
+        }
+
+        .main-interface .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .main-interface .categories {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .main-interface .category {
+            flex: 1;
+            min-width: 280px;
+            background-color: var(--background-color);
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-interface .category i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .main-interface .category h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-interface .category p {
+            font-size: 0.9rem;
+        }
+
+        .main-interface footer {
+            background-color: var(--header-footer-color);
+            color: var(--header-footer-text-color);
+            padding: 1rem 0;
+            width: 100%;
+        }
+
+        .main-interface .footer-banner {
+            background: url('https://via.placeholder.com/1920x100') center/cover no-repeat;
+            height: 100px;
+            width: 100%;
+        }
+
+        .main-interface .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            max-width: 1200px;
+            margin: 1rem auto;
+            text-align: center;
+        }
+
+        .main-interface .footer-column {
+            flex: 1;
+            min-width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .main-interface .footer-column h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .main-interface .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .main-interface .footer-column ul li {
+            margin-bottom: 0.3rem;
+        }
+
+        .main-interface .footer-column ul li a {
+            color: var(--header-footer-text-color);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .main-interface .footer-column ul li a:hover {
+            color: #cce7ff;
+        }
+
+        .main-interface .footer-social {
+            margin-top: 1rem;
+        }
+
+        .main-interface .footer-social a {
+            color: var(--header-footer-text-color);
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .main-interface .footer-social a:hover {
+            color: #cce7ff;
+        }
+
+        .main-interface .footer-bottom {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-interface .menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .main-interface .footer-content {
+                flex-direction: column;
+            }
+
+            .main-interface .footer-column {
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Contenedor principal del teleprompter -->
-    <div class="teleprompter-container" id="teleprompterContainer">
-        <div class="teleprompter-text" id="teleprompterText">
-            Este es un ejemplo de texto para el teleprompter de reportero.
+    <div class="content">
+        <!-- Iniciar Sesión -->
+        <div class="login-container" id="login-container">
+            <h1>Bienvenido de nuevo</h1>
+            <p>Por favor, inicia sesión para continuar con tu aprendizaje.</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Usuario</label>
+                    <input type="text" id="login-username" name="username" placeholder="Tu nombre de usuario" required />
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" name="password" placeholder="Tu contraseña" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Iniciar Sesión</button>
+                </div>
+            </form>
+            <div class="additional-links">
+                <p><a href="#" id="show-register">¿No tienes cuenta? Regístrate aquí</a></p>
+                <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+            </div>
+        </div>
+
+        <!-- Registro -->
+        <div class="register-container" id="register-container" style="display: none;">
+            <h1>Crear Cuenta</h1>
+            <p>Completa los campos para registrarte.</p>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-username">Usuario</label>
+                    <input type="text" id="register-username" name="username" placeholder="Tu nombre de usuario" required />
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" name="password" placeholder="Tu contraseña" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Registrarse</button>
+                </div>
+            </form>
+            <div class="additional-links">
+                <p><a href="#" id="show-login">¿Ya tienes cuenta? Inicia sesión aquí</a></p>
+            </div>
+        </div>
+
+        <!-- Pantalla de Bienvenida (Vacía, no necesaria en este caso) -->
+        <div class="welcome-container" id="welcome-container" style="display: none;">
+            <!-- Este contenedor está vacío porque reemplazamos con la nueva interfaz principal -->
+        </div>
+
+        <!-- Nueva Interfaz Principal -->
+        <div class="main-interface" id="main-interface">
+            <header>
+                <div class="logo">
+                    <img src="https://via.placeholder.com/50" alt="Logo">
+                    <h1>Interactive Learning</h1>
+                </div>
+                <div class="menu">
+                    <a href="#">Home</a>
+                    <a href="#">Features</a>
+                    <a href="#">Contact</a>
+                    <a href="#" id="logout-button" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search...">
+                    <button>Search</button>
+                </div>
+            </header>
+
+            <div class="hero">
+                <h2>Learn Smarter, Not Harder</h2>
+                <p>Access the best tools to make your learning experience interactive and engaging.</p>
+                <a href="#">Get Started</a>
+            </div>
+
+            <div class="container">
+                <section class="categories">
+                    <div class="category">
+                        <i class="fas fa-book"></i>
+                        <h2>Flashcards</h2>
+                        <p>Organize your study materials with ease.</p>
+                    </div>
+                    <div class="category">
+                        <i class="fas fa-question-circle"></i>
+                        <h2>Practice</h2>
+                        <p>Test your knowledge with dynamic quizzes.</p>
+                    </div>
+                    <div class="category">
+                        <i class="fas fa-video"></i>
+                        <h2>Videos</h2>
+                        <p>Learn through high-quality video lectures.</p>
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <div class="footer-banner"></div>
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h4>Links</h4>
+                        <ul>
+                            <li><a href="#">Government</a></li>
+                            <li><a href="#">Education</a></li>
+                            <li><a href="#">Research</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Help Desk</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    © 2024 Interactive Learning Platform. All rights reserved.
+                </div>
+            </footer>
         </div>
     </div>
 
-    <!-- Controles -->
-    <div class="controls">
-        <label for="speedInput">Velocidad (caracteres por segundo):</label>
-        <input type="number" id="speedInput" value="10" min="1" max="100" />
-        
-        <label for="textInput">Texto del teleprompter:</label>
-        <textarea id="textInput">Este es un ejemplo de texto para el teleprompter de reportero. Puedes agregar más texto aquí y no habrá limitaciones de caracteres.</textarea>
-        
-        <div class="button-group">
-            <button onclick="pauseTeleprompter()">Pausar</button>
-            <button onclick="resumeTeleprompter()">Reanudar</button>
-            <button onclick="restartAnimation()">Reiniciar</button>
-        </div>
-    </div>
+    <!-- Footer Inicial (Solo visible en login/register) -->
+    <footer id="initial-footer">
+        <img src="https://via.placeholder.com/1920x150" alt="Footer Image">
+        <p>&copy; 2024 Biomédica. Todos los derechos reservados.</p>
+    </footer>
 
     <script>
-        const teleprompterContainer = document.getElementById('teleprompterContainer');
-        const teleprompterText = document.getElementById('teleprompterText');
-        const speedInput = document.getElementById('speedInput');
-        const textInput = document.getElementById('textInput');
+        // Reemplaza con la URL de tu Web App de Google Apps Script
+        const webAppURL = 'https://script.google.com/macros/s/AKfycbyBXBX0Td4dFCUyDHQhqt9dlCcetBXUTYjjoPSNpdq5_HPVYvSxhiX_qj_EqcP0QfMmSg/exec';
 
-        let isDragging = false;
-        let startX, startY, initialLeft, initialTop;
-        let isPaused = false;
-
-        // Función para iniciar el arrastre
-        teleprompterContainer.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialLeft = teleprompterContainer.offsetLeft;
-            initialTop = teleprompterContainer.offsetTop;
-            teleprompterContainer.style.cursor = 'grabbing';
+        // Mostrar y ocultar formularios
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('register-container').style.display = 'block';
+            document.getElementById('initial-footer').style.display = 'block';
         });
 
-        // Función para mover el contenedor mientras se arrastra
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-                teleprompterContainer.style.left = `${initialLeft + dx}px`;
-                teleprompterContainer.style.top = `${initialTop + dy}px`;
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('register-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('initial-footer').style.display = 'block';
+        });
+
+        // Registro de Usuario
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            if (!username || !password) {
+                alert('Por favor, completa todos los campos.');
+                return;
             }
-        });
 
-        // Función para finalizar el arrastre
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            teleprompterContainer.style.cursor = 'grab';
-        });
+            const deviceModel = navigator.userAgent;
 
-        // Función para actualizar la velocidad y el texto automáticamente
-        function updateTeleprompter() {
-            teleprompterText.textContent = textInput.value;
-            restartAnimation();
-        }
+            // Enviar solicitud al backend
+            try {
+                const response = await fetch(webAppURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `action=register&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&deviceModel=${encodeURIComponent(deviceModel)}`
+                });
 
-        // Calcula la duración de la animación en función de la longitud del texto y la velocidad (caracteres por segundo)
-        function calculateDuration() {
-            const textLength = textInput.value.length;
-            const speed = speedInput.value;
-            const containerWidth = teleprompterContainer.offsetWidth;
-            const textWidth = teleprompterText.scrollWidth;
+                const result = JSON.parse(await response.text());
 
-            const baseDuration = textWidth / speed;
-
-            return Math.max(baseDuration, containerWidth / speed);
-        }
-
-        // Reinicia la animación con una nueva configuración
-        function restartAnimation() {
-            const duration = calculateDuration();
-            teleprompterText.style.animation = 'none';
-            teleprompterText.offsetHeight; // Forzar el reflow para reiniciar la animación
-            teleprompterText.style.animation = `scrollText ${duration}s linear infinite`;
-        }
-
-        // Función para pausar el desplazamiento del teleprompter
-        function pauseTeleprompter() {
-            teleprompterText.style.animationPlayState = 'paused';
-            isPaused = true;
-        }
-
-        // Función para reanudar el desplazamiento del teleprompter
-        function resumeTeleprompter() {
-            teleprompterText.style.animationPlayState = 'running';
-            isPaused = false;
-        }
-
-        // Función para alternar pausa y reanudar con la barra espaciadora
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault(); // Evitar que la barra espaciadora cause desplazamiento de la página
-                if (isPaused) {
-                    resumeTeleprompter();
+                if (result.success) {
+                    alert(result.message);
+                    document.getElementById('register-container').style.display = 'none';
+                    document.getElementById('login-container').style.display = 'block';
+                    document.getElementById('initial-footer').style.display = 'block';
                 } else {
-                    pauseTeleprompter();
+                    alert('Error: ' + result.message);
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un problema con el registro. Inténtalo de nuevo.');
             }
         });
 
-        // Actualizar el teleprompter cuando cambie la velocidad o el contenido del texto
-        speedInput.addEventListener('input', updateTeleprompter);
-        textInput.addEventListener('input', updateTeleprompter);
+        // Inicio de Sesión
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
 
-        // Inicializar la configuración por defecto
-        updateTeleprompter();
+            if (!username || !password) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            const deviceModel = navigator.userAgent;
+
+            // Enviar solicitud al backend
+            try {
+                const response = await fetch(webAppURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&deviceModel=${encodeURIComponent(deviceModel)}`
+                });
+
+                const result = JSON.parse(await response.text());
+
+                if (result.success) {
+                    // Guardar sesión en localStorage
+                    localStorage.setItem('loggedInUser', username);
+                    localStorage.setItem('sessionToken', result.token);
+                    // Mostrar interfaz principal
+                    showMainInterface();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un problema con el inicio de sesión. Inténtalo de nuevo.');
+            }
+        });
+
+        // Función para mostrar la interfaz principal
+        function showMainInterface() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('register-container').style.display = 'none';
+            document.getElementById('main-interface').style.display = 'flex';
+            // Ocultar el footer inicial
+            document.getElementById('initial-footer').style.display = 'none';
+        }
+
+        // Función para mostrar la interfaz de bienvenida si hay sesión activa
+        function showWelcomeScreen(username) {
+            showMainInterface();
+        }
+
+        // Verificar sesión al cargar la página
+        window.onload = () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const sessionToken = localStorage.getItem('sessionToken');
+
+            if (loggedInUser && sessionToken) {
+                showWelcomeScreen(loggedInUser);
+            } else {
+                // Asegurarse de que el footer inicial esté visible cuando no hay sesión
+                document.getElementById('initial-footer').style.display = 'block';
+            }
+        };
+
+        // Botón de Cerrar Sesión
+        document.getElementById('logout-button')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Limpiar la sesión
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('sessionToken');
+            // Mostrar la pantalla de inicio de sesión
+            document.getElementById('main-interface').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+            // Mostrar el footer inicial nuevamente
+            document.getElementById('initial-footer').style.display = 'block';
+            alert('Has cerrado sesión correctamente.');
+        });
     </script>
 </body>
 </html>
