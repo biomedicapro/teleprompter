@@ -191,6 +191,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .main-interface .logo {
@@ -226,13 +227,17 @@
         .main-interface .search-bar {
             display: flex;
             align-items: center;
+            margin-top: 0.5rem;
+            width: 100%;
+            max-width: 300px;
         }
 
         .main-interface .search-bar input {
             padding: 0.5rem;
             border: none;
-            border-radius: 5px;
-            margin-right: 10px;
+            border-radius: 5px 0 0 5px;
+            margin-right: 0;
+            flex: 1;
         }
 
         .main-interface .search-bar button {
@@ -240,7 +245,7 @@
             background-color: #004aad;
             color: var(--header-footer-text-color);
             border: none;
-            border-radius: 5px;
+            border-radius: 0 5px 5px 0;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -399,16 +404,77 @@
 
         @media (max-width: 768px) {
             .main-interface .menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .main-interface .search-bar {
+                max-width: 100%;
+            }
+
+            .main-interface .search-bar input {
+                margin-right: 0;
+                border-radius: 5px 5px 0 0;
+            }
+
+            .main-interface .search-bar button {
+                border-radius: 0 0 5px 5px;
+                width: 100%;
+            }
+
+            .main-interface header {
                 flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main-interface .menu {
+                flex-wrap: wrap;
                 gap: 0.5rem;
+                margin-top: 0.5rem;
             }
 
-            .main-interface .footer-content {
+            .main-interface .search-bar {
+                margin-top: 1rem;
+            }
+
+            .main-interface .hero {
+                padding: 2rem 1rem;
+            }
+
+            .main-interface .categories {
                 flex-direction: column;
+                align-items: center;
             }
 
-            .main-interface .footer-column {
-                margin-bottom: 1rem;
+            .main-interface .category {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-interface .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .main-interface .hero p {
+                font-size: 0.9rem;
+            }
+
+            .main-interface .hero a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+
+            .main-interface .menu a {
+                font-size: 0.9rem;
+            }
+
+            .main-interface .footer-column h4 {
+                font-size: 0.9rem;
+            }
+
+            .main-interface .footer-column ul li a {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -460,7 +526,7 @@
             </div>
         </div>
 
-        <!-- Pantalla de Bienvenida (Vacía, no necesaria en este caso) -->
+        <!-- Pantalla de Bienvenida -->
         <div class="welcome-container" id="welcome-container" style="display: none;">
             <!-- Este contenedor está vacío porque reemplazamos con la nueva interfaz principal -->
         </div>
