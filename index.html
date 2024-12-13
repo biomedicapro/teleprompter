@@ -455,13 +455,24 @@
         }
 
         /* Media Queries para Responsividad */
-        @media (max-width: 768px) {
-            /* Eliminamos la funcionalidad de menú desplegable */
-            /* Aseguramos que el menú esté siempre visible */
-            .main-interface .menu {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
+       @media (max-width: 768px) {
+    /* Ajuste del menú en dispositivos móviles para disposición horizontal */
+    .main-interface .header-bottom .menu {
+        display: flex;
+        flex-direction: row; /* Cambiado de column a row */
+        justify-content: space-around; /* Espacio entre los enlaces */
+        align-items: center;
+        width: 100%; /* Asegura que ocupe todo el ancho */
+        gap: 0.5rem; /* Espaciado entre los elementos */
+        padding: 0.5rem 0;
+    }
+
+    .main-interface .menu a {
+        font-size: 0.9rem; /* Tamaño de texto ajustado */
+        text-align: center; /* Centrar el texto */
+        flex: 1; /* Opcional: Hacer que cada enlace ocupe el mismo ancho */
+    }
+}
 
             /* Ajustes en Header */
             .main-interface header {
