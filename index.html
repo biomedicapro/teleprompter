@@ -16,6 +16,7 @@
             --button-hover-color: #021024;
             --logout-color: #ff4d4d;
             --logout-hover-color: #e60000;
+            --disabled-color: #a1a1aa;
         }
 
         /* Reset y estilos base */
@@ -56,6 +57,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            position: relative;
         }
 
         h1 {
@@ -100,6 +102,7 @@
 
         .form-actions {
             margin-top: 1.5rem;
+            position: relative;
         }
 
         button {
@@ -118,6 +121,11 @@
         button:hover {
             background-color: var(--button-hover-color);
             transform: scale(1.02);
+        }
+
+        button:disabled {
+            background-color: var(--disabled-color);
+            cursor: not-allowed;
         }
 
         .additional-links {
@@ -192,6 +200,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .main-interface .logo {
@@ -229,25 +238,33 @@
             align-items: center;
             margin-top: 0.5rem;
             width: 100%;
-            max-width: 300px;
+            max-width: 400px;
+            position: relative;
         }
 
         .main-interface .search-bar input {
-            padding: 0.5rem;
+            padding: 0.5rem 2.5rem 0.5rem 0.5rem;
             border: none;
-            border-radius: 5px 0 0 5px;
-            margin-right: 0;
+            border-radius: 5px;
             flex: 1;
+            font-size: 1rem;
         }
 
         .main-interface .search-bar button {
-            padding: 0.5rem 1rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 50px;
             background-color: #004aad;
             color: var(--header-footer-text-color);
             border: none;
             border-radius: 0 5px 5px 0;
             cursor: pointer;
             transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .main-interface .search-bar button:hover {
@@ -412,16 +429,6 @@
                 max-width: 100%;
             }
 
-            .main-interface .search-bar input {
-                margin-right: 0;
-                border-radius: 5px 5px 0 0;
-            }
-
-            .main-interface .search-bar button {
-                border-radius: 0 0 5px 5px;
-                width: 100%;
-            }
-
             .main-interface header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -448,6 +455,51 @@
 
             .main-interface .category {
                 max-width: 100%;
+            }
+
+            /* Ajustes para el header móvil */
+            .main-interface header {
+                padding: 1rem;
+            }
+
+            .main-interface .menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            /* Menú desplegable para móviles */
+            .main-interface .menu-toggle {
+                display: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            @media (max-width: 768px) {
+                .main-interface .menu {
+                    display: none;
+                    flex-direction: column;
+                    width: 100%;
+                    background-color: var(--header-footer-color);
+                    border-radius: 5px;
+                    margin-top: 0.5rem;
+                }
+
+                .main-interface .menu.active {
+                    display: flex;
+                }
+
+                .main-interface .menu-toggle {
+                    display: block;
+                    color: var(--header-footer-text-color);
+                }
+
+                .main-interface .menu a {
+                    padding: 0.5rem 1rem;
+                }
+
+                .main-interface .search-bar {
+                    width: 100%;
+                }
             }
         }
 
@@ -477,6 +529,29 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* Loader Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #fff;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -12px 0 0 -12px;
+            display: none;
+        }
+
+        .spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -495,7 +570,8 @@
                     <input type="password" id="login-password" name="password" placeholder="Tu contraseña" required />
                 </div>
                 <div class="form-actions">
-                    <button type="submit">Iniciar Sesión</button>
+                    <button type="submit" id="login-button">Iniciar Sesión</button>
+                    <div class="spinner" id="login-spinner"></div>
                 </div>
             </form>
             <div class="additional-links">
@@ -518,7 +594,8 @@
                     <input type="password" id="register-password" name="password" placeholder="Tu contraseña" required />
                 </div>
                 <div class="form-actions">
-                    <button type="submit">Registrarse</button>
+                    <button type="submit" id="register-button">Registrarse</button>
+                    <div class="spinner" id="register-spinner"></div>
                 </div>
             </form>
             <div class="additional-links">
@@ -538,15 +615,18 @@
                     <img src="https://via.placeholder.com/50" alt="Logo">
                     <h1>Interactive Learning</h1>
                 </div>
-                <div class="menu">
-                    <a href="#">Home</a>
-                    <a href="#">Features</a>
-                    <a href="#">Contact</a>
-                    <a href="#" id="logout-button" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                <div class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
                 </div>
+                <nav class="menu" id="menu">
+                    <a href="#"><i class="fas fa-home"></i> Home</a>
+                    <a href="#"><i class="fas fa-cogs"></i> Features</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+                    <a href="#" id="logout-button" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                </nav>
                 <div class="search-bar">
-                    <input type="text" placeholder="Search...">
-                    <button>Search</button>
+                    <input type="text" placeholder="Buscar...">
+                    <button><i class="fas fa-search"></i></button>
                 </div>
             </header>
 
@@ -646,6 +726,12 @@
 
             const deviceModel = navigator.userAgent;
 
+            // Mostrar spinner y desactivar botón
+            const registerButton = document.getElementById('register-button');
+            const registerSpinner = document.getElementById('register-spinner');
+            registerButton.disabled = true;
+            registerSpinner.classList.add('active');
+
             // Enviar solicitud al backend
             try {
                 const response = await fetch(webAppURL, {
@@ -669,6 +755,10 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Hubo un problema con el registro. Inténtalo de nuevo.');
+            } finally {
+                // Ocultar spinner y habilitar botón
+                registerButton.disabled = false;
+                registerSpinner.classList.remove('active');
             }
         });
 
@@ -684,6 +774,12 @@
             }
 
             const deviceModel = navigator.userAgent;
+
+            // Mostrar spinner y desactivar botón
+            const loginButton = document.getElementById('login-button');
+            const loginSpinner = document.getElementById('login-spinner');
+            loginButton.disabled = true;
+            loginSpinner.classList.add('active');
 
             // Enviar solicitud al backend
             try {
@@ -709,6 +805,10 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Hubo un problema con el inicio de sesión. Inténtalo de nuevo.');
+            } finally {
+                // Ocultar spinner y habilitar botón
+                loginButton.disabled = false;
+                loginSpinner.classList.remove('active');
             }
         });
 
@@ -752,6 +852,16 @@
             document.getElementById('initial-footer').style.display = 'block';
             alert('Has cerrado sesión correctamente.');
         });
+
+        // Manejo del Menú Desplegable en Móviles
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('active');
+            });
+        }
     </script>
 </body>
 </html>
